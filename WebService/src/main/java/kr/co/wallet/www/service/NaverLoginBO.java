@@ -18,8 +18,8 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 @Service
 public class NaverLoginBO {
 
-	private final static String CLIENT_ID = "NhDDxRzAOUV2MF7O5aeN";
-	private final static String CLIENT_SECRET = "4KThkiTG2e";
+	private final static String CLIENT_ID = "Client ID";
+	private final static String CLIENT_SECRET = "SECRET KEY";
 	private final static String REDIRECT_URI = "http://localhost:8088/callback";
 	private final static String SESSION_STATE = "oauth_state";
 	
