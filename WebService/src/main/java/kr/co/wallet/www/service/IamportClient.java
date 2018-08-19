@@ -30,8 +30,8 @@ import kr.co.wallet.www.vo.Payment;
 public class IamportClient {
 	private static final String API_URL = "https://api.iamport.kr";
 //	private static final String API_URL = "http://localhost:8088";
-	private String api_key = "2468019739314068";
-	private String api_secret = "VlylYVJgpo8qv69P5wWAwyoUjLpg7lP3GnpFi8WIx492ajRgPOQmmfhG1GX81McI9BosKkahpkkADbQt";
+	private String api_key = "API KEY";
+	private String api_secret = "API Secrete KEY";
 	private HttpClient client = HttpClientBuilder.create().build();
 	private Gson gson = new Gson();
 	
