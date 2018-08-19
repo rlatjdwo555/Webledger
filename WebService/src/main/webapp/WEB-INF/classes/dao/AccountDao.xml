@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.co.wallet.www.dao.AccountDao">
+
+<resultMap type="Account" id="AccountMap">
+  	<result column="cname" property="title"/>
+</resultMap>
+
+<select id="accList" parameterType="map" resultMap="AccountMap">
+select ano, cname, content, price, creDate
+from category, account
+where category.cno = account.title 
+order by account.creDate desc
+limit #{startPage}, #{endPage}
+</select>
+
+<insert id="addAcc" parameterType="Account">
+insert into account (title, content, price, creDate)
+values(#{tno}, #{content}, #{price}, #{creDate})
+</insert>
+
+<delete id="delAcc" parameterType="int">
+delete from account where ano=#{ano}
+</delete>
+
+<select id="totalCount" parameterType="map" resultType="int">
+select count(*) from account
+<where>
+	<if test="flag == 2">
+		price <![CDATA[ < ]]> 0
+	</if>
+	<if test="flag == 3">
+		price <![CDATA[ > ]]> 0
+	</if>
+</where>
+</select>
+
+<select id="getCname" parameterType="int" resultType="String">
+select cname from category where cno=#{title}
+</select>
+
+<select id="getCno" parameterType="String" resultType="int">
+select cno from category where cname=#{cname}
+</select>
+
+<delete id="deleteAcc" parameterType="int">
+delete from account where ano=#{ano}
+</delete>
+
+<select id="totalSum" parameterType="map" resultType="String">
+select abs(sum(price)) as sum from account 
+where 
+<choose>
+	<when test="flag == 1">price <![CDATA[ < ]]> 0</when>
+  	<when test="flag == 2">price <![CDATA[ > ]]> 0</when>
+  	<otherwise>0 > price</otherwise>
+</choose>
+and credate >= #{sdate} and credate <![CDATA[ < ]]> #{edate}
+</select>
+
+<select id="dailySum" parameterType="map" resultType="String">
+select abs(sum(price)) as dailySum from account
+where 
+<choose>
+	<when test="flag == 1">price <![CDATA[ < ]]> 0</when>
+  	<when test="flag == 2">price <![CDATA[ > ]]> 0</when>
+</choose>
+and credate = #{daily}
+</select>
+
+<select id="totalCategory" parameterType="map" resultType="Category">
+select cname, abs(sum(price)) as totalPrice, count(title) as count from account, category
+where cno=title and creDate between #{sdate} and #{edate} and
+<choose>
+	<when test="flag == 1">0 > price</when>
+  	<when test="flag == 2">price > 0</when>
+</choose>
+group by cname order by count asc, title desc;   
+</select> 
+
+<select id="rankCategory" parameterType="map" resultType="Category">
+select cname, ABS(sum(price)) as totalPrice, count(title) as count from account, category
+where cno=title and creDate between #{sdate} and #{edate} and
+<choose>
+	<when test="flag == 1">0 > price</when>
+  	<when test="flag == 2">price > 0</when>
+</choose>
+group by cname order by totalPrice desc, count desc
+limit 0, 5;   
+</select>
+
+</mapper>
